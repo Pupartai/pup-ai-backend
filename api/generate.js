@@ -1,5 +1,5 @@
 // api/generate.js
-import { createJob } from "../lib/jobQueue.js";
+import { createJob } from "./_lib/jobQueue.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
