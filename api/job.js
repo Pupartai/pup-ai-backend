@@ -1,6 +1,15 @@
+// api/job.js
+import { allowCors } from "./_lib/cors.js";
 import { getJob } from "./_lib/jobs.js";
 
 export default async function handler(req, res) {
+  // Enable CORS
+  allowCors(res);
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
   const id = req.query.id;
   if (!id) return res.status(400).json({ ok: false, error: "Missing id" });
 
