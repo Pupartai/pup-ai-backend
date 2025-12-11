@@ -1,17 +1,15 @@
 // api/generate.js
-import { allowCors } from "./_lib/cors.js";
-import { createJob } from "./_lib/jobs.js";
+import { createJob } from "./_lib/jobs";
 
 export default async function handler(req, res) {
-  // Enable CORS
-  allowCors(res);
+  res.setHeader("Access-Control-Allow-Origin", "https://pupartai.com");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  // Respond immediately to preflight
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
 
-  // Normal logic
   const job = await createJob();
   return res.status(200).json(job);
 }
