@@ -1,4 +1,4 @@
-import { getJob } from "./_lib/jobs";
+import { getJob } from "./_lib/jobs.js";
 
 export default async function handler(req, res) {
   const id = req.query.id;
