@@ -1,20 +1,30 @@
-// api/job/[id].js
+import { getJobStatus } from "./_lib/jobQueue";
 
-export const config = { runtime: "nodejs" };
+export default function handler(req, res) {
+  try {
+    const { id } = req.query;
 
-import { getJob } from "../../_lib/jobQueue.js";
+    if (!id) {
+      return res.status(400).json({
+        ok: false,
+        error: "Missing job ID"
+      });
+    }
 
-export default async function handler(req, res) {
-  const { id } = req.query;
+    // Get job status from in-memory queue
+    const status = getJobStatus(id);
 
-  const job = getJob(id);
-
-  if (!job) {
-    return res.status(404).json({ error: "Job not found" });
+    return res.status(200).json({
+      ok: true,
+      id,
+      status
+    });
+  } catch (err) {
+    console.error("JOB ENDPOINT ERROR:", err);
+    return res.status(500).json({
+      ok: false,
+      error: "Server error",
+      details: err.message
+    });
   }
-
-  return res.status(200).json({
-    jobId: job.id,
-    state: job.state
-  });
 }
