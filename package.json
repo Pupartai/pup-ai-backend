@@ -1,5 +1,13 @@
 {
   "name": "pup-ai-backend",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node api/index.js"
+  },
+  "dependencies": {
+    "busboy": "1.6.0",
+    "uuid": "9.0.0"
+  }
 }
