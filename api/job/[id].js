@@ -1,5 +1,5 @@
 // api/job/[id].js
-import { getJob } from "../../../lib/jobQueue.js";
+import { getJob } from "../../_lib/jobQueue.js";
 
 export default async function handler(req, res) {
   const { id } = req.query;
