@@ -1,4 +1,4 @@
-import { getJobStatus } from "./_lib/jobQueue";
+import { getJob } from "./_lib/jobQueue";
 
 export default function handler(req, res) {
   try {
@@ -11,13 +11,20 @@ export default function handler(req, res) {
       });
     }
 
-    // Get job status from in-memory queue
-    const status = getJobStatus(id);
+    const job = getJob(id);
+
+    if (!job) {
+      return res.status(404).json({
+        ok: false,
+        id,
+        status: "not_found"
+      });
+    }
 
     return res.status(200).json({
       ok: true,
-      id,
-      status
+      id: job.id,
+      status: job.state
     });
   } catch (err) {
     console.error("JOB ENDPOINT ERROR:", err);
