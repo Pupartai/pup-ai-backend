@@ -1,4 +1,6 @@
 // api/generate.js
+export const config = { runtime: "nodejs" };
+
 import { createJob } from "./_lib/jobQueue.js";
 
 export default async function handler(req, res) {
