@@ -1,18 +1,19 @@
 // api/generate.js
-export const config = { runtime: "nodejs" };
 
-import { createJob } from "./_lib/jobQueue.js";
+// Import the same mock job storage (copy/paste inside this file)
+const jobs = {};
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+export default function handler(req, res) {
+  // Create a fake job ID
+  const id = Math.random().toString(36).substring(2, 10);
 
-  // In Phase 2 this will include real AI inputs.
-  const jobId = createJob();
+  // Store job in memory
+  jobs[id] = { id, state: "processing" };
 
-  return res.status(200).json({
-    message: "Job started",
-    jobId: jobId
-  });
+  // Simulate job finishing after 2 seconds
+  setTimeout(() => {
+    jobs[id].state = "finished";
+  }, 2000);
+
+  return res.status(200).json({ id, state: "processing" });
 }
