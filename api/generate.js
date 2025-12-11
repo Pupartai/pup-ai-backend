@@ -1,4 +1,3 @@
-// api/generate.js
 import { createJob } from "./_lib/jobs";
 
 export default async function handler(req, res) {
