@@ -6,8 +6,9 @@
   "scripts": {
     "start": "node api/index.js"
   },
-  "dependencies": {
-    "busboy": "1.6.0",
-    "uuid": "9.0.0"
-  }
+"dependencies": {
+  "busboy": "1.6.0",
+  "uuid": "9.0.0",
+  "@vercel/kv": "^1.0.0"
+}
 }
