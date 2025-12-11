@@ -1,18 +1,16 @@
 // api/job.js
+import { getJob } from "./_lib/jobs";
 
-// Reuse the global job store created in generate.js
-const jobs = global.jobs || (global.jobs = {});
-
-export default function handler(req, res) {
-  const { id } = req.query;
+export default async function handler(req, res) {
+  const id = req.query.id;
 
   if (!id) {
-    return res.status(400).json({ ok: false, error: "Missing job id" });
+    return res.status(400).json({ ok: false, error: "Missing id" });
   }
 
-  const job = jobs[id];
+  const job = await getJob(id);
 
-  if (!job) {
+  if (!job || !job.id) {
     return res.status(404).json({ ok: false, error: "Job not found" });
   }
 
