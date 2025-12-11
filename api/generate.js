@@ -1,4 +1,4 @@
-import { createJob } from "./_lib/jobs";
+import { createJob } from "./_lib/jobs.js";
 
 export default async function handler(req, res) {
   const job = await createJob();
