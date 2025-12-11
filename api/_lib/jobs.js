@@ -1,10 +1,9 @@
-// api/_lib/jobs.js
 import { kv } from "@vercel/kv";
 
 export async function createJob() {
   const id = Math.random().toString(36).substring(2, 10);
 
-  // Save initial job state
+  // Save initial job state in KV
   await kv.hset(`job:${id}`, {
     id,
     state: "processing",
@@ -19,5 +18,6 @@ export async function createJob() {
 }
 
 export async function getJob(id) {
-  return await kv.hgetall(`job:${id}`);
+  const job = await kv.hgetall(`job:${id}`);
+  return job || null;
 }
