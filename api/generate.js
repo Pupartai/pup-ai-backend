@@ -1,5 +1,5 @@
 // api/generate.js
-import { createJob } from "./_lib/jobs";
+import { createJob } from "../_lib/jobs";
 
 export default async function handler(req, res) {
   // ALWAYS send CORS headers for ALL requests
