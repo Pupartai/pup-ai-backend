@@ -25,9 +25,11 @@ export default async function handler(req, res) {
     }
 
   const output = await replicate.run(
-    "cjwbw/rembg:5c7f9e9a9d5c8e9c8b2a8c5c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4",
+    "cjwbw/rembg@sha256:4b6d3c2f6d6f6f2a9d6e8f1b4e9a2b8f6c7d9e1f2a3b4c5d6e7f8a9b0",
     {
-      input: { image: imageUrl }
+      input: {
+        image: imageUrl
+      }
     }
   );
 
