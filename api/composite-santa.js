@@ -1,3 +1,6 @@
+export const config = {
+  runtime: "nodejs",
+};
 import { createCanvas, loadImage } from "canvas";
 
 export default async function handler(req, res) {
