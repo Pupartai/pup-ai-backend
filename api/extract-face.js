@@ -34,7 +34,7 @@ if (!imageBase64) {
     }
   );
 
-    return res.status(200).json({ facePng: output });
+    return res.status(200).json({ facePng: output[0] });
   } catch (err) {
   console.error("REPLICATE ERROR:", err);
   return res.status(500).json({ error: err.message || "Face extraction failed" });
