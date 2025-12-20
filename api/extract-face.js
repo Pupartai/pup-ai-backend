@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     }
 
   const output = await replicate.run(
-    "cjwbw/rembg@sha256:4b6d3c2f6d6f6f2a9d6e8f1b4e9a2b8f6c7d9e1f2a3b4c5d6e7f8a9b0",
+    "stability-ai/background-removal",
     {
       input: {
         image: imageUrl
