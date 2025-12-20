@@ -1,3 +1,4 @@
+
 import sharp from "sharp";
 
 export const config = {
@@ -18,6 +19,7 @@ export default async function handler(req, res) {
 
   try {
     const { facePng, hiRes = false } = req.body;
+    console.log("FACE PNG RECEIVED:", facePng);
     if (!facePng) {
       return res.status(400).json({ error: "Missing facePng" });
     }
