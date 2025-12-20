@@ -19,7 +19,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { imageUrl } = req.body;
+    const { imageBase64 } = req.body;
     if (!imageUrl) {
       return res.status(400).json({ error: "Missing imageUrl" });
     }
