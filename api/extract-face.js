@@ -17,18 +17,19 @@ export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).send("POST only");
   }
-
+  
   try {
-    const { imageBase64 } = req.body;
-    if (!imageUrl) {
-      return res.status(400).json({ error: "Missing imageUrl" });
-    }
+const { imageBase64 } = req.body;
+
+if (!imageBase64) {
+  return res.status(400).json({ error: "Missing imageBase64" });
+}
 
   const output = await replicate.run(
     "cjwbw/rembg:fb8af171cfa1616ddcf1242c093f9c46bcada5ad4cf6f2fbe8b81b330ec5c003",
     {
       input: {
-        image: imageUrl
+        image: imageBase64
       }
     }
   );
