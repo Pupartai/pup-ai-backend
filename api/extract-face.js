@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ facePng: output });
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: "Face extraction failed" });
-  }
+  console.error("REPLICATE ERROR:", err);
+  return res.status(500).json({ error: err.message || "Face extraction failed" });
+}
 }
