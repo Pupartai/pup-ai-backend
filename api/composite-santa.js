@@ -42,7 +42,14 @@ const watermarkBuffer = await fetch(
   "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/watermark2.png?v=1766322788"
 ).then(r => r.arrayBuffer());
 
-    const output = await santa
+const output = await santa
+  .composite([
+    {
+      input: await face.toBuffer(),
+      left: Math.floor(santaMeta.width * 0.325 * scale),
+      top: Math.floor(santaMeta.height * 0.18 * scale),
+    },
+  ])
   .jpeg({ quality: 80 })
   .toBuffer();
 
