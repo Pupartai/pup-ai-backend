@@ -38,21 +38,9 @@ export default async function handler(req, res) {
     const faceWidth = Math.floor(santaMeta.width * 0.35 * scale);
     const face = sharp(Buffer.from(faceBuffer)).resize(faceWidth);
 
-const watermarkSvg = `
-<svg width="${santaMeta.width}" height="${santaMeta.height}">
-  <style>
-    .wm {
-      fill: rgba(255,255,255,0.35);
-      font-size: 42px;
-      font-family: Arial, sans-serif;
-      letter-spacing: 2px;
-    }
-  </style>
-  <text x="50%" y="95%" text-anchor="middle" class="wm">
-    PupArtAI • Preview
-  </text>
-</svg>
-`;
+const watermarkBuffer = await fetch(
+  "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/watermark.png?v=1766321505"
+).then(r => r.arrayBuffer());
 
 const output = await santa
   .composite([
@@ -62,7 +50,7 @@ const output = await santa
       top: Math.floor(santaMeta.height * 0.18 * scale),
     },
     {
-      input: Buffer.from(watermarkSvg),
+      input: Buffer.from(watermarkBuffer),
       gravity: "south",
     },
   ])
