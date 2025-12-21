@@ -52,7 +52,7 @@ const output = await santa
 {
   input: await sharp(Buffer.from(watermarkBuffer))
     .resize({
-      width: Math.floor(santaMeta.width * 0.8), // control side margins here
+      width: Math.floor(santaMeta.width * 0.9), // control side margins here
     })
     .toBuffer(),
   gravity: "south",
