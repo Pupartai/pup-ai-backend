@@ -44,10 +44,15 @@ const watermarkBuffer = await fetch(
 
 const output = await santa
   .composite([
-{
-  input: Buffer.from(watermarkBuffer),
-  gravity: "south",
-},
+    {
+      input: await face.toBuffer(),
+      left: Math.floor(santaMeta.width * 0.325 * scale),
+      top: Math.floor(santaMeta.height * 0.18 * scale),
+    },
+    {
+      input: Buffer.from(watermarkBuffer),
+      gravity: "south",
+    },
   ])
   .jpeg({ quality: hiRes ? 95 : 80 })
   .toBuffer();
