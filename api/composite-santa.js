@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     }
 
     const santaUrl =
-      "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/santa-ai.jpg?v=1766231836";
+      "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/watermark.png?v=1766322420";
 
     const santaBuffer = await fetch(santaUrl).then(r => r.arrayBuffer());
     const faceBuffer = await fetch(facePng).then(r => r.arrayBuffer());
