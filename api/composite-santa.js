@@ -17,13 +17,12 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).send("POST only");
 
   try {
-    const { facePng } = req.body;
-
+    const { facePng, hiRes = false } = req.body;
     if (!facePng) {
       return res.status(400).json({ error: "Missing facePng" });
     }
 
-    // HIP-HOP TEMPLATE (square, high-res)
+    // ✅ Hip-Hop template (no dog face)
     const templateUrl =
       "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/hiphop-v1-template.png";
 
@@ -33,12 +32,14 @@ export default async function handler(req, res) {
     const template = sharp(Buffer.from(templateBuffer));
     const templateMeta = await template.metadata();
 
-    // FACE sizing (head & shoulders only)
+    // ✅ Resize incoming dog face
     const faceWidth = Math.floor(templateMeta.width * 0.35);
+    const face = sharp(Buffer.from(faceBuffer)).resize(faceWidth);
 
-    const face = sharp(Buffer.from(faceBuffer))
-      .resize(faceWidth)
-      .ensureAlpha();
+    // ✅ Watermark (WORKING VERSION)
+    const watermarkBuffer = await fetch(
+      "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/watermark2.png"
+    ).then(r => r.arrayBuffer());
 
     const output = await template
       .composite([
@@ -47,8 +48,12 @@ export default async function handler(req, res) {
           left: Math.floor(templateMeta.width * 0.325),
           top: Math.floor(templateMeta.height * 0.18),
         },
+        {
+          input: Buffer.from(watermarkBuffer),
+          gravity: "south",
+        },
       ])
-      .jpeg({ quality: 85 })
+      .jpeg({ quality: hiRes ? 95 : 80 })
       .toBuffer();
 
     res.setHeader("Content-Type", "image/jpeg");
