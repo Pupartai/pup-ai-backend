@@ -36,7 +36,11 @@ export default async function handler(req, res) {
     const santaMeta = await santa.metadata();
 
     const faceWidth = Math.floor(santaMeta.width * 0.35 * scale);
-    const face = sharp(Buffer.from(faceBuffer)).resize(faceWidth);
+const face = sharp(Buffer.from(faceBuffer))
+  .resize(faceWidth)
+  .blur(1.2)
+  .modulate({ brightness: 1, saturation: 0.95 })
+  .ensureAlpha(0.85);
 
 const watermarkBuffer = await fetch(
   "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/watermark2.png?v=1766322788"
