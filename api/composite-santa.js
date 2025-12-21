@@ -1,4 +1,3 @@
-
 import sharp from "sharp";
 
 export const config = {
@@ -18,44 +17,39 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).send("POST only");
 
   try {
-    const { facePng, hiRes = false } = req.body;
-    console.log("FACE PNG RECEIVED:", facePng);
+    const { facePng } = req.body;
+
     if (!facePng) {
       return res.status(400).json({ error: "Missing facePng" });
     }
 
-    const santaUrl =
-      "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/santa-ai.jpg?v=1766231836";
+    // HIP-HOP TEMPLATE (square, high-res)
+    const templateUrl =
+      "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/hiphop-v1-template.png";
 
-    const santaBuffer = await fetch(santaUrl).then(r => r.arrayBuffer());
+    const templateBuffer = await fetch(templateUrl).then(r => r.arrayBuffer());
     const faceBuffer = await fetch(facePng).then(r => r.arrayBuffer());
 
-    const scale = hiRes ? 2 : 1;
+    const template = sharp(Buffer.from(templateBuffer));
+    const templateMeta = await template.metadata();
 
-    const santa = sharp(Buffer.from(santaBuffer));
-    const santaMeta = await santa.metadata();
+    // FACE sizing (head & shoulders only)
+    const faceWidth = Math.floor(templateMeta.width * 0.35);
 
-    const faceWidth = Math.floor(santaMeta.width * 0.35 * scale);
-const face = sharp(Buffer.from(faceBuffer))
-  .resize(faceWidth)
-  .blur(1.2)
-  .modulate({ brightness: 1, saturation: 0.95 })
-  .ensureAlpha(0.85);
+    const face = sharp(Buffer.from(faceBuffer))
+      .resize(faceWidth)
+      .ensureAlpha();
 
-const watermarkBuffer = await fetch(
-  "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/watermark2.png?v=1766322788"
-).then(r => r.arrayBuffer());
-
-const output = await santa
-  .composite([
-    {
-      input: await face.toBuffer(),
-      left: Math.floor(santaMeta.width * 0.325 * scale),
-      top: Math.floor(santaMeta.height * 0.18 * scale),
-    },
-  ])
-  .jpeg({ quality: 80 })
-  .toBuffer();
+    const output = await template
+      .composite([
+        {
+          input: await face.toBuffer(),
+          left: Math.floor(templateMeta.width * 0.325),
+          top: Math.floor(templateMeta.height * 0.18),
+        },
+      ])
+      .jpeg({ quality: 85 })
+      .toBuffer();
 
     res.setHeader("Content-Type", "image/jpeg");
     res.send(output);
