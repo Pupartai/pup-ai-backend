@@ -49,10 +49,14 @@ const output = await santa
       left: Math.floor(santaMeta.width * 0.325 * scale),
       top: Math.floor(santaMeta.height * 0.18 * scale),
     },
-    {
-      input: Buffer.from(watermarkBuffer),
-      gravity: "south",
-    },
+{
+  input: await sharp(Buffer.from(watermarkBuffer))
+    .resize({
+      width: Math.floor(santaMeta.width * 0.6), // control side margins here
+    })
+    .toBuffer(),
+  gravity: "south",
+},
   ])
   .jpeg({ quality: hiRes ? 95 : 80 })
   .toBuffer();
