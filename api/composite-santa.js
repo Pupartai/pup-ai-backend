@@ -22,31 +22,36 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing facePng" });
     }
 
-    // ✅ Hip-Hop template (no dog face)
+    // === TEMPLATE (Hip-Hop v1) ===
     const templateUrl =
       "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/hiphop-v1-template.png";
 
+    // === WATERMARK ===
+    const watermarkUrl =
+      "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/watermark2.png";
+
     const templateBuffer = await fetch(templateUrl).then(r => r.arrayBuffer());
     const faceBuffer = await fetch(facePng).then(r => r.arrayBuffer());
+    const watermarkBuffer = await fetch(watermarkUrl).then(r => r.arrayBuffer());
 
     const template = sharp(Buffer.from(templateBuffer));
     const templateMeta = await template.metadata();
 
-    // ✅ Resize incoming dog face
-    const faceWidth = Math.floor(templateMeta.width * 0.35);
-    const face = sharp(Buffer.from(faceBuffer)).resize(faceWidth);
+    const scale = hiRes ? 2 : 1;
 
-    // ✅ Watermark (WORKING VERSION)
-    const watermarkBuffer = await fetch(
-      "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/watermark2.png"
-    ).then(r => r.arrayBuffer());
+    // === FACE PREP ===
+    const faceWidth = Math.floor(templateMeta.width * 0.35 * scale);
+    const face = sharp(Buffer.from(faceBuffer))
+      .resize(faceWidth)
+      .ensureAlpha();
 
+    // === COMPOSITE ===
     const output = await template
       .composite([
         {
           input: await face.toBuffer(),
-          left: Math.floor(templateMeta.width * 0.325),
-          top: Math.floor(templateMeta.height * 0.18),
+          left: Math.floor(templateMeta.width * 0.325 * scale),
+          top: Math.floor(templateMeta.height * 0.18 * scale),
         },
         {
           input: Buffer.from(watermarkBuffer),
