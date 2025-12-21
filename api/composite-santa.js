@@ -44,11 +44,6 @@ const watermarkBuffer = await fetch(
 
 const output = await santa
   .composite([
-    {
-      input: await face.toBuffer(),
-      left: Math.floor(santaMeta.width * 0.325 * scale),
-      top: Math.floor(santaMeta.height * 0.18 * scale),
-    },
 {
   input: await sharp(Buffer.from(watermarkBuffer))
     .toBuffer(),
