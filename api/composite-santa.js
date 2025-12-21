@@ -45,8 +45,7 @@ const watermarkBuffer = await fetch(
 const output = await santa
   .composite([
 {
-  input: await sharp(Buffer.from(watermarkBuffer))
-    .toBuffer(),
+  input: Buffer.from(watermarkBuffer),
   gravity: "south",
 },
   ])
