@@ -38,16 +38,36 @@ export default async function handler(req, res) {
     const faceWidth = Math.floor(santaMeta.width * 0.35 * scale);
     const face = sharp(Buffer.from(faceBuffer)).resize(faceWidth);
 
-    const output = await santa
-      .composite([
-        {
-          input: await face.toBuffer(),
-          left: Math.floor(santaMeta.width * 0.325 * scale),
-          top: Math.floor(santaMeta.height * 0.18 * scale),
-        },
-      ])
-      .jpeg({ quality: hiRes ? 95 : 80 })
-      .toBuffer();
+const watermarkSvg = `
+<svg width="${santaMeta.width}" height="${santaMeta.height}">
+  <style>
+    .wm {
+      fill: rgba(255,255,255,0.35);
+      font-size: 42px;
+      font-family: Arial, sans-serif;
+      letter-spacing: 2px;
+    }
+  </style>
+  <text x="50%" y="95%" text-anchor="middle" class="wm">
+    PupArtAI • Preview
+  </text>
+</svg>
+`;
+
+const output = await santa
+  .composite([
+    {
+      input: await face.toBuffer(),
+      left: Math.floor(santaMeta.width * 0.325 * scale),
+      top: Math.floor(santaMeta.height * 0.18 * scale),
+    },
+    {
+      input: Buffer.from(watermarkSvg),
+      gravity: "south",
+    },
+  ])
+  .jpeg({ quality: hiRes ? 95 : 80 })
+  .toBuffer();
 
     res.setHeader("Content-Type", "image/jpeg");
     res.send(output);
