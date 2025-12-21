@@ -39,7 +39,7 @@ export default async function handler(req, res) {
     const face = sharp(Buffer.from(faceBuffer)).resize(faceWidth);
 
 const watermarkBuffer = await fetch(
-  "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/watermark.png?v=1766322420"
+  "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/watermark2.png?v=1766322788"
 ).then(r => r.arrayBuffer());
 
 const output = await santa
