@@ -53,10 +53,13 @@ export default async function handler(req, res) {
           left: Math.floor(templateMeta.width * 0.325 * scale),
           top: Math.floor(templateMeta.height * 0.18 * scale),
         },
-        {
-          input: Buffer.from(watermarkBuffer),
-          gravity: "south",
-        },
+{
+  input: await sharp(Buffer.from(watermarkBuffer))
+    .resize(Math.floor(templateMeta.width * 0.8))
+    .png()
+    .toBuffer(),
+  gravity: "south",
+},
       ])
       .jpeg({ quality: hiRes ? 95 : 80 })
       .toBuffer();
