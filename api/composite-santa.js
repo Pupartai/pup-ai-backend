@@ -34,8 +34,7 @@ export default async function handler(req, res) {
     const faceBuffer = await fetch(facePng).then(r => r.arrayBuffer());
     const watermarkBuffer = await fetch(watermarkUrl).then(r => r.arrayBuffer());
 
-    const template = sharp(Buffer.from(templateBuffer));
-    const templateMeta = await template.metadata();
+const templateMeta = await sharp(Buffer.from(templateBuffer)).metadata();
 
     const scale = hiRes ? 2 : 1;
 
@@ -46,8 +45,8 @@ export default async function handler(req, res) {
       .ensureAlpha();
 
     // === COMPOSITE ===
-    const output = await template
-      .composite([
+const output = await sharp(Buffer.from(templateBuffer))
+  .composite([
         {
           input: await face.toBuffer(),
           left: Math.floor(templateMeta.width * 0.325 * scale),
