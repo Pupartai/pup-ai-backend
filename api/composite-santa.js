@@ -40,9 +40,26 @@ const templateMeta = await sharp(Buffer.from(templateBuffer)).metadata();
 
     // === FACE PREP ===
     const faceWidth = Math.floor(templateMeta.width * 0.35 * scale);
-    const face = sharp(Buffer.from(faceBuffer))
-      .resize(faceWidth)
-      .ensureAlpha();
+const face = sharp(Buffer.from(faceBuffer))
+  .resize(faceWidth)
+  .ensureAlpha()
+  .blur(0.8)
+  .composite([
+    {
+      input: Buffer.from(
+        `<svg width="${faceWidth}" height="${faceWidth}">
+          <defs>
+            <radialGradient id="fade" cx="50%" cy="50%" r="50%">
+              <stop offset="60%" stop-color="white"/>
+              <stop offset="100%" stop-color="black"/>
+            </radialGradient>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#fade)"/>
+        </svg>`
+      ),
+      blend: "dest-in"
+    }
+  ]);
 
     // === COMPOSITE ===
 const output = await sharp(Buffer.from(templateBuffer))
