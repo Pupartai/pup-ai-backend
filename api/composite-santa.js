@@ -63,8 +63,12 @@ const output = await sharp(Buffer.from(templateBuffer))
       .jpeg({ quality: hiRes ? 95 : 80 })
       .toBuffer();
 
-    res.setHeader("Content-Type", "image/jpeg");
-    res.send(output);
+res.setHeader("Content-Type", "image/jpeg");
+res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+res.setHeader("Pragma", "no-cache");
+res.setHeader("Expires", "0");
+res.setHeader("Surrogate-Control", "no-store");
+res.send(output);
   } catch (err) {
     console.error("COMPOSITE ERROR:", err);
     res.status(500).json({ error: "Composite failed" });
