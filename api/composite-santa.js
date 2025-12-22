@@ -24,7 +24,7 @@ export default async function handler(req, res) {
 
     // === TEMPLATE (Hip-Hop v1) ===
     const templateUrl =
-      "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/hiphop-v1-template.png";
+      "https://cdn.shopify.com/s/files/1/0958/1255/1030/files/santa.jpg?v=1766418888";
 
     // === WATERMARK ===
     const watermarkUrl =
